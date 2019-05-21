@@ -1,0 +1,5 @@
+# Ignore emacs backup and auto-save files
+*~
+\#*\#
+# Ignore "ignore" directory
+/ignore/

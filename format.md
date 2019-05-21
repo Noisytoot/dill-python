@@ -1,0 +1,44 @@
+# Dill format specification v1.0
+
+## File extension
+.toml or .dill
+## The shebang line
+Dill files can begin with a shebang line (example: "#!/path/to/dill read"), "usually #!/usr/local/bin/dill read"
+## The [meta] section
+Documents should contain the [meta] section.
+The string 'format' should be set to "Dill" (key not case sensitive)
+The string 'version.toml': the version of toml
+The string 'version.dill': the version of Dill
+The string 'document.language': the ISO 639-3 code of the language that the document is in, if an ISO 639-3 code is not available then just the name of the language
+## The [define] section
+This section is used to define custom keys. Once defined the will be recognised by the Dill programm accordingly replaced with the value.
+
+For example if you have define section as following:
+[define]
+cat = "Some meowing furry animal"
+then the Dill program will read 'custom.cat' as 'Some meowing furry animal'
+the key must be a string
+## The [data] section
+The string 'name.first': first name
+The string 'name.middle': middle name
+The string 'name.last': last name
+The date 'birthdate': the birthdate
+The 'location' key has 4 following sub keys: pluscode, latlong, address, postcode.
+All sub keys have modifiers at the end example like  Home, Work, etc. (anything you would like Dill to display)
+Example: location.pluscode.Home, location.latlong.Work, location.postcode.Overseas
+All of location sub keys are strings except for location.latlong which is an array of floats
+The order of elements in the location.latlong array is: first lattitude, then longitude
+The string 'organization': organization
+The 'contact' key has 3 sub keys: phone, email and username. All sub keys are of type Hashtable.
+All sub keys should have modifiers. Examples for contact.phone and contact.email - Home, Work, etc. Example for contact.username - GitHub, Twitter, etc. All modifiers are of type String.
+The array 'citizenships': citizenship/citizenships
+The string 'website': website
+The string 'description': a description
+The array 'languages.fluent': fluent languages, ISO 639-3 Codes if available, if not then the name of the language
+The string 'job': job
+
+## Non-standard extensions
+There are two types of non-standard extentions: ones beginning with 'extention.' and ones beginning with 'custom.'. 
+First category (beginning with extention.) should be called 'extention."Whatever you want it to be"'.
+Second category (beginning with custom.) extentions should be called custom.'Whatever you want it to be', unless they are defined in 'define' section.
+ 
