@@ -25,7 +25,15 @@ Commands:
     compress-br [filename]: compress file using brotli
     compress-xz [filename]: compress file using xz
     compress-sz [filename]: compress file using snappy
-    compress-lzo [filename]: compress file using lzo""")
+    compress-lzo [filename]: compress file using lzo
+    decompress-zlib [filename]: decompress file using zlib
+    decompress-lz4 [filename]: decompress file using lz4
+    decompress-gz [filename]: decompress file using gzip
+    decompress-bz2 [filename]: decompress file using bzip2
+    decompress-br [filename]: decompress file using brotli
+    decompress-xz [filename]: decompress file using xz
+    decompress-sz [filename]: decompress file using snappy
+    decompress-lzo [filename]: decompress file using lzo""")
 
 if len(sys.argv) < 2:
     dillhelp()
@@ -40,90 +48,126 @@ if command == "help":
     exit(0)
 elif command == "read":
     card = toml.load(filename)
+
+# Zlib
 elif command == "read-zlib":
     with open(filename, "rb") as f:
         card = toml.loads(zlib.decompress(f.read()).decode("utf-8"))
 elif command == "compress-zlib":
-    ufile = open(filename, "r")
-    cdata = zlib.compress(ufile.read().encode("utf-8"))
-    ufile.close()
-    with open(f"{filename}.zlib", "wb") as cfile:
-        cfile.write(cdata)
+    with open(filename, "r") as f:
+        cdata = zlib.compress(f.read().encode("utf-8"))
+    sys.stdout.buffer.write(cdata)
+elif command == "decompress-zlib":
+    with open(filename, "rb") as f:
+        udata = zlib.decompress(f.read()).decode("utf-8")
+    sys.stdout.write(udata)
+
+# LZ4
 elif command == "read-lz4":
     with open(filename, "rb") as f:
         card = toml.loads(lz4.frame.decompress(f.read()).decode("utf-8"))
 elif command == "compress-lz4":
-    ufile = open(filename, "r")
-    cdata = lz4.frame.compress(ufile.read().encode("utf-8"))
-    ufile.close()
-    with open(f"{filename}.lz4", "wb") as cfile:
-        cfile.write(cdata)
+    with open(filename, "r") as f:
+        cdata = lz4.frame.compress(f.read().encode("utf-8"))
+    sys.stdout.buffer.write(cdata)
+elif command == "decompress-lz4":
+    with open(filename, "rb") as f:
+        udata = lz4.frame.decompress(f.read()).decode("utf-8")
+    sys.stdout.write(udata)
+
+# Gzip
 elif command == "read-gz":
     with open(filename, "rb") as f:
         card = toml.loads(gzip.decompress(f.read()).decode("utf-8"))
 elif command == "compress-gz":
-    ufile = open(filename, "r")
-    cdata = gzip.compress(ufile.read().encode("utf-8"))
-    ufile.close()
-    with open(f"{filename}.gz", "wb") as cfile:
-        cfile.write(cdata)
+    with open(filename, "r") as f:
+        cdata = gzip.compress(f.read().encode("utf-8"))
+    sys.stdout.buffer.write(cdata)
+elif command == "decompress-gz":
+    with open(filename, "rb") as f:
+        udata = gzip.decompress(f.read()).decode("utf-8")
+    sys.stdout.write(udata)
+
+# Bzip2
 elif command == "read-bz2":
     with open(filename, "rb") as f:
         card = toml.loads(bz2.decompress(f.read()).decode("utf-8"))
 elif command == "compress-bz2":
-    ufile = open(filename, "r")
-    cdata = bz2.compress(ufile.read().encode("utf-8"))
-    ufile.close()
-    with open(f"{filename}.bz2", "wb") as cfile:
-        cfile.write(cdata)
+    with open(filename, "r") as f:
+        cdata = bz2.compress(f.read().encode("utf-8"))
+    sys.stdout.buffer.write(cdata)
+elif command == "decompress-bz2":
+    with open(filename, "rb") as f:
+        udata = bz2.decompress(f.read()).decode("utf-8")
+    sys.stdout.write(udata)
+
+# XZ
 elif command == "read-xz":
     with open(filename, "rb") as f:
         card = toml.loads(lzma.decompress(f.read()).decode("utf-8"))
 elif command == "compress-xz":
-    ufile = open(filename, "r")
-    cdata = lzma.compress(ufile.read().encode("utf-8"))
-    ufile.close()
-    with open(f"{filename}.xz", "wb") as cfile:
-        cfile.write(cdata)
+    with open(filename, "r") as f:
+        cdata = lzma.compress(f.read().encode("utf-8"))
+    sys.stdout.buffer.write(cdata)
+elif command == "decompress-xz":
+    with open(filename, "rb") as f:
+        udata = lzma.decompress(f.read()).decode("utf-8")
+    sys.stdout.write(udata)
+
+# Brotli
 elif command == "read-br":
     with open(filename, "rb") as f:
         card = toml.loads(brotli.decompress(f.read()).decode("utf-8"))
 elif command == "compress-br":
-    ufile = open(filename, "r")
-    cdata = brotli.compress(ufile.read().encode("utf-8"))
-    ufile.close()
-    with open(f"{filename}.br", "wb") as cfile:
-        cfile.write(cdata)
+    with open(filename, "r") as f:
+        cdata = brotli.compress(f.read().encode("utf-8"))
+    sys.stdout.buffer.write(cdata)
+elif command == "decompress-br":
+    with open(filename, "rb") as f:
+        udata = brotli.decompress(f.read()).decode("utf-8")
+    sys.stdout.write(udata)
+
+# Zstandard
 elif command == "read-zstd":
     with open(filename, "rb") as f:
         decompressor = zstd.ZstdDecompressor()
         card = toml.loads(decompressor.decompress(f.read()).decode("utf-8"))
 elif command == "compress-zstd":
-    ufile = open(filename, "r")
-    compressor = zstd.ZstdCompressor()
-    cdata = compressor.compress(ufile.read().encode("utf-8"))
-    ufile.close()
-    with open(f"{filename}.zst", "wb") as cfile:
-        cfile.write(cdata)
+    with open(filename, "r") as f:
+        compressor = zstd.ZstdCompressor()
+        cdata = compressor.compress(ufile.read().encode("utf-8"))
+    sys.stdout.buffer.write(cdata)
+elif command == "decompress-zstd":
+    with open(filename, "rb") as f:
+        decompressor = zstd.ZstdDecompressor()
+        udata = decompressor.decompress(f.read()).decode("utf-8")
+    sys.stdout.write(udata)
+
+# Snappy
 elif command == "read-sz":
     with open(filename, "rb") as f:
         card = toml.loads(snappy.decompress(f.read()).decode("utf-8"))
 elif command == "compress-sz":
-    ufile = open(filename, "r")
-    cdata = snappy.compress(ufile.read().encode("utf-8"))
-    ufile.close()
-    with open(f"{filename}.sz", "wb") as cfile:
-        cfile.write(cdata)
+    with open(filename, "r") as f:
+        cdata = snappy.compress(f.read().encode("utf-8"))
+    sys.stdout.buffer.write(cdata)
+elif command == "decompress-sz":
+    with open(filename, "rb") as f:
+        udata = snappy.decompress(f.read()).decode("utf-8")
+    sys.stdout.write(udata)
+
+# LZO
 elif command == "read-lzo":
     with open(filename, "rb") as f:
         card = toml.loads(lzo.decompress(f.read()).decode("utf-8"))
 elif command == "compress-lzo":
-    ufile = open(filename, "r")
-    cdata = lzo.compress(ufile.read().encode("utf-8"))
-    ufile.close()
-    with open(f"{filename}.lzo", "wb") as cfile:
-        cfile.write(cdata)
-
+    with open(filename, "r") as f:
+        cdata = lzo.compress(f.read().encode("utf-8"))
+    sys.stdout.buffer.write(cdata)
+elif command == "decompress-lzo":
+    with open(filename, "rb") as f:
+        udata = lzo.decompress(f.read()).decode("utf-8")
+    sys.stdout.write(udata)
 
 def warning(text):
     print(f"{Fore.YELLOW}{Style.BRIGHT}Warning: {text}{Style.RESET_ALL}")
@@ -202,6 +246,8 @@ def read():
                 print(card["define"][key] + ": " + value)
             else:
                 print(f"{key}: {value}")
+    with suppress(Exception):
+        print("Gender: " + card["data"]["gender"])
 
 if (command == "read"
     or command == "read-zlib"

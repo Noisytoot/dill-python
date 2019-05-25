@@ -34,3 +34,4 @@ website = "https://basil.example.org/"
 description = "Hello, I live in Finland but have a UK phone number!"
 languages.fluent = ["eng", "rus", "fin"] # ISO 639-3 Codes if available, if not then the name of the language
 job = "Not being a cat"
+gender = "Unknown" # Can be whatever you want dill to display
