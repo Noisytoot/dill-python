@@ -183,7 +183,7 @@ def warning(text):
 
 def read():
     if "format" not in card["meta"]:
-        warning("the format if not specified in the document")
+        warning("the format is not specified in the document")
     if ("format" in card["meta"]) and (card["meta"]["format"].lower() != "dill"):
         warning("the format specified in the in document is not Dill")
     with suppress(Exception):
