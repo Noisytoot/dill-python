@@ -5,4 +5,4 @@
 * What is dill-python?
   A program for reading dill, in Python
 * Where can I find the specification
-  In the [[https://github.com/dill-format/dill/format.org][format.org]] file in the [[https://github.com/dill-format/dill][Dill repository]]
+  In the [[https://github.com/dill-format/dill/blob/master/format.org][format.org]] file in the [[https://github.com/dill-format/dill][Dill repository]]
